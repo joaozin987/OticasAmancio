@@ -28,13 +28,27 @@
         </div>
       </div>
       <div class="hero-showcase" aria-label="Armações em destaque">
-        <img
-          v-for="image in featuredImages"
-          :key="image.src"
-          :src="image.src"
-          :alt="image.alt"
-          @click="openImage(image.src)"
-        >
+        <div class="hero-carousel">
+          <button class="carousel-arrow prev" type="button" aria-label="Imagem anterior" @click="previousFeaturedImage">‹</button>
+          <img
+            :key="activeFeaturedImage.src"
+            :src="activeFeaturedImage.src"
+            :alt="activeFeaturedImage.alt"
+            @click="openImage(activeFeaturedImage.src)"
+          >
+          <button class="carousel-arrow next" type="button" aria-label="Próxima imagem" @click="nextFeaturedImage">›</button>
+
+          <div class="carousel-dots" aria-label="Selecionar imagem em destaque">
+            <button
+              v-for="(image, index) in featuredImages"
+              :key="image.src"
+              type="button"
+              :class="{ active: currentFeaturedIndex === index }"
+              :aria-label="`Ver imagem ${index + 1}`"
+              @click="setFeaturedImage(index)"
+            ></button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -181,7 +195,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 const whatsappNumber = "5582991200198";
 const orderIntentText = "Enviar meu grau e receber avaliação";
@@ -189,6 +203,8 @@ const activeFilter = ref("todos");
 const selectedProduct = ref(null);
 const isOrderPanelOpen = ref(false);
 const lightboxImage = ref("");
+const currentFeaturedIndex = ref(0);
+let carouselTimer = null;
 
 const categories = {
   polarizadas: "Polarizadas",
@@ -298,6 +314,8 @@ const featuredImages = [
   }
 ];
 
+const activeFeaturedImage = computed(() => featuredImages[currentFeaturedIndex.value]);
+
 const initialPrescriptionForm = () => ({
   hasRecipePhoto: false,
   isMultifocal: false,
@@ -384,6 +402,39 @@ const closeImage = () => {
   lightboxImage.value = "";
 };
 
+const setFeaturedImage = (index) => {
+  currentFeaturedIndex.value = index;
+  restartCarousel();
+};
+
+const nextFeaturedImage = () => {
+  currentFeaturedIndex.value = (currentFeaturedIndex.value + 1) % featuredImages.length;
+  restartCarousel();
+};
+
+const previousFeaturedImage = () => {
+  currentFeaturedIndex.value = (currentFeaturedIndex.value - 1 + featuredImages.length) % featuredImages.length;
+  restartCarousel();
+};
+
+const startCarousel = () => {
+  carouselTimer = window.setInterval(() => {
+    currentFeaturedIndex.value = (currentFeaturedIndex.value + 1) % featuredImages.length;
+  }, 4500);
+};
+
+const stopCarousel = () => {
+  if (carouselTimer) {
+    window.clearInterval(carouselTimer);
+    carouselTimer = null;
+  }
+};
+
+const restartCarousel = () => {
+  stopCarousel();
+  startCarousel();
+};
+
 const prescriptionText = () => [
   `OD: Esférico ${form.value.od.sphere} | Cilindro ${form.value.od.cylinder} | Eixo ${form.value.od.axis}`,
   `OE: Esférico ${form.value.oe.sphere} | Cilindro ${form.value.oe.cylinder} | Eixo ${form.value.oe.axis}`
@@ -415,11 +466,17 @@ const sendOrder = () => {
 };
 
 onMounted(() => {
+  startCarousel();
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeOrderPanel();
       closeImage();
     }
   });
+});
+
+onBeforeUnmount(() => {
+  stopCarousel();
 });
 </script>
