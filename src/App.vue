@@ -183,7 +183,7 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 
-const whatsappNumber = "5582987229827";
+const whatsappNumber = "5582991200198";
 const orderIntentText = "Enviar meu grau e receber avaliação";
 const activeFilter = ref("todos");
 const selectedProduct = ref(null);
