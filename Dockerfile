@@ -23,7 +23,6 @@ EXPOSE 3000
 
 # Serve the built files and bind to the port provided by Railway
 CMD ["sh", "-c", "serve -s dist -l tcp:$PORT"]
-=======
 # Use a lightweight Node image for development
 FROM node:20-alpine AS base
 WORKDIR /app
