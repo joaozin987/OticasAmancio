@@ -21,4 +21,4 @@ ENV PORT 3000
 EXPOSE 3000
 
 # Serve the built files and bind to the port provided by Railway
-CMD ["sh", "-c", "serve -s dist -l tcp:$PORT"]
+CMD ["sh", "-c", "serve -s dist -l tcp://0.0.0.0:$PORT"]
