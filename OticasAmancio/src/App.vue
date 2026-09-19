@@ -1191,18 +1191,19 @@ onBeforeUnmount(() => {
   transform: rotate(180deg);
 }
 
-/* Menu Toggle Hambúrguer Mobile */
+/* Botão Menu Hambúrguer */
 .mobile-menu-toggle {
   display: none;
   flex-direction: column;
   justify-content: space-around;
-  width: 32px;
-  height: 28px;
+  width: 30px;
+  height: 24px;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   z-index: 101;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-menu-toggle .bar {
@@ -1214,7 +1215,7 @@ onBeforeUnmount(() => {
 }
 
 .mobile-menu-toggle .bar-top {
-  transform: translateY(9px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
 
 .mobile-menu-toggle .bar-mid {
@@ -1222,28 +1223,54 @@ onBeforeUnmount(() => {
 }
 
 .mobile-menu-toggle .bar-bot {
-  transform: translateY(-9px) rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Responsivo para 768px, 400px e abaixo */
+/* Ajuste Responsivo do Header e Filtros para Mobile (768px, 400px e abaixo) */
 @media (max-width: 768px) {
+  .site-header {
+    position: relative;
+    width: 100%;
+  }
+
   .nav {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    box-sizing: border-box;
+  }
+
+  /* Ajuste de proporção da logo para não quebrar a barra */
+  .header-logo {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-logo img {
+    height: 36px;
+    max-width: 160px;
+    width: auto;
+    object-fit: contain;
   }
 
   .mobile-menu-toggle {
     display: flex;
+    flex-shrink: 0;
   }
 
+  /* Gaveta do Menu Aberto no Mobile */
   .nav-links {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
+    box-sizing: border-box;
     flex-direction: column;
-    padding: 20px;
-    gap: 16px;
+    padding: 16px 20px;
+    gap: 12px;
     z-index: 100;
   }
 
@@ -1253,9 +1280,13 @@ onBeforeUnmount(() => {
 
   .nav-links a {
     width: 100%;
+    box-sizing: border-box;
     text-align: center;
+    padding: 12px 0;
+    display: block;
   }
 
+  /* Filtros Mobile */
   .mobile-filter-toggle {
     width: 100%;
     min-height: 50px;
@@ -1274,6 +1305,7 @@ onBeforeUnmount(() => {
     text-align: left;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(17, 24, 39, 0.06);
+    box-sizing: border-box;
   }
 
   .mobile-filter-toggle:active {
@@ -1289,13 +1321,13 @@ onBeforeUnmount(() => {
     border-radius: 12px;
     background: #f8fafc;
     box-shadow: 0 5px 18px rgba(17, 24, 39, 0.08);
+    box-sizing: border-box;
   }
 
   .filters.mobile-open {
     display: flex;
   }
 
-  /* Mantém 2 colunas organizadas tanto em 700px quanto em 400px */
   .filter-button {
     flex: 1 1 calc(50% - 10px);
     min-height: 45px;
@@ -1309,11 +1341,21 @@ onBeforeUnmount(() => {
     width: 100%;
     min-height: 44px;
     margin-top: 2px;
+    box-sizing: border-box;
   }
 }
 
-/* Ajuste fino para 400px (mantendo exatamente a mesma lógica da de 700px) */
+/* Telas menores (400px e abaixo) */
 @media (max-width: 430px) {
+  .nav {
+    padding: 10px 14px;
+  }
+
+  .header-logo img {
+    height: 32px;
+    max-width: 140px;
+  }
+
   .filters {
     gap: 8px;
     padding: 10px;
