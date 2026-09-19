@@ -1230,29 +1230,31 @@ onBeforeUnmount(() => {
    Ajustes Mobile: 768px até telas ultra-compactas (<= 400px)
    ========================================================== */
 /* ==========================================================
-   Header Mobile: Logo na esquerda, Toggle na direita
-   Menu gaveta com fundo opaco, divisória e padding
+   Header Mobile ajustado:
+   - Usa var(--body-bg) para nunca destoar da cor
+   - Logo cravada na esquerda e botão 'X' na direita
+   - Menu aberto EMPURRA o conteúdo (sem tapar o título)
+   - Espaçamento claro antes do 'Selecione a armação ideal'
    ========================================================== */
 @media (max-width: 768px) {
   .site-header {
-    position: relative;
     width: 100%;
-    z-index: 100;
-    background-color: var(--header-bg, #f5f0e6); /* Cor de fundo do seu tema */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Linha divisória sutil com o Hero */
+    position: relative;
+    background-color: var(--body-bg) !important;
   }
 
   .nav {
     display: flex !important;
-    flex-direction: row !important;
+    flex-wrap: wrap !important; /* Permite que o menu desça para a linha de baixo */
     align-items: center !important;
-    justify-content: space-between !important; /* Logo na esquerda e toggle na direita */
+    justify-content: space-between !important;
     width: 100% !important;
-    padding: 12px 18px !important;
+    padding: 14px 18px 8px 18px !important;
     box-sizing: border-box !important;
+    background-color: var(--body-bg) !important;
   }
 
-  /* Trava a logo na esquerda */
+  /* Logo fixa na extrema esquerda */
   .header-logo {
     display: flex !important;
     align-items: center !important;
@@ -1261,18 +1263,18 @@ onBeforeUnmount(() => {
   }
 
   .header-logo img {
-    height: 48px !important; /* Altura ideal para o círculo da marca */
+    height: 46px !important;
     width: auto !important;
     display: block !important;
     object-fit: contain;
   }
 
-  /* Botão Hambúrguer cravado na direita */
+  /* Botão X / Hambúrguer na extrema direita */
   .mobile-menu-toggle {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    width: 28px !important;
+    width: 26px !important;
     height: 20px !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -1280,67 +1282,56 @@ onBeforeUnmount(() => {
     border: none !important;
     cursor: pointer !important;
     flex-shrink: 0 !important;
-    z-index: 102;
+    z-index: 10;
   }
 
-  /* Menu aberto (Gaveta) */
+  /* 
+    Menu Aberto: 
+    Muda de absolute para static/relativo, EMPURRANDO o hero 
+    para baixo em vez de ficar por cima do texto
+  */
   .nav-links {
     display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    box-sizing: border-box;
-    flex-direction: column;
-    padding: 20px 18px !important; /* Padding confortável para os botões respirarem */
-    gap: 12px;
-    z-index: 101;
-    background-color: #f5f0e6; /* IMPORTANTE: Fundo opaco para não vazar as letras do hero */
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1); /* Divisória marcando o fim do menu */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* Sombra separando da seção abaixo */
+    width: 100% !important;
+    position: static !important; /* Tira o absolute que causava a sobreposição */
+    box-sizing: border-box !important;
+    flex-direction: column !important;
+    padding: 16px 0 20px 0 !important; /* Espaçamento interno dos botões */
+    gap: 12px !important;
+    margin-bottom: 24px !important; /* Dá o respiro para o 'Selecione a armação ideal' aparecer limpo embaixo */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Linha sutil de divisão */
+    background-color: var(--body-bg) !important;
   }
 
   .nav-links.nav-open {
     display: flex !important;
   }
 
-  /* Estilização dos botões/links dentro da gaveta */
   .nav-links a {
-    width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  /* Seletor específico para o botão do catálogo no menu */
-  .nav-links a.cata {
-    background: #e9dfcf;
-    color: #2c3328;
-  }
-
-  /* Botão do WhatsApp no menu */
-  .nav-links a.whatsapp-link {
-    background: #25d366;
-    color: #ffffff;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    display: block !important;
   }
 }
 
-/* Telas de 400px ou menos (iPhone SE / telas estreitas) */
+/* Telas de 400px ou menos (iPhone SE) */
 @media (max-width: 400px) {
   .nav {
-    padding: 10px 14px !important;
+    padding: 12px 14px 6px 14px !important;
   }
 
   .header-logo img {
-    height: 44px !important;
+    height: 42px !important;
   }
 
   .nav-links {
-    padding: 16px 14px !important;
-    gap: 10px;
+    padding: 14px 0 18px 0 !important;
+    margin-bottom: 20px !important;
   }
 }
 </style>
