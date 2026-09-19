@@ -1,5 +1,5 @@
 <template>
- <header class="site-header" id="inicio">
+  <header class="site-header" id="inicio">
     <nav class="nav">
       <div class="header-logo">
         <img :src="logoSrc" alt="Logo Ótica Amancio">
@@ -783,7 +783,7 @@ const products = [
     category: "unissex",
     image: imagePath("uni-modelo-5.jpg"),
     price: "R$ 120,00",
-    description: "Armação unissex versátil, confortável para o dia a dia."
+    description: "Armação復unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u064",
@@ -1102,7 +1102,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative; /* Garante que o menu suspenso abre alinhado à barra */
+  position: relative;
 }
 
 .header-logo img {
@@ -1187,13 +1187,12 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: #f3f4f6;
   color: #111827;
   padding: 12px 20px;
   border-radius: 8px;
   font-weight: 700;
   text-decoration: none;
-  border: 1px solid #e5e7eb;
 }
 
 .hero-carousel {
@@ -1272,7 +1271,7 @@ onBeforeUnmount(() => {
   gap: 16px;
   padding: 20px;
   border-radius: 12px;
-  background: #ffffff;
+  background: #f9fafb;
   border: 1px solid #e5e7eb;
 }
 
@@ -1290,7 +1289,7 @@ onBeforeUnmount(() => {
   justify-content: center;
   font-weight: 800;
   flex-shrink: 0;
-  background: #f3f4f6;
+  background: #e5e7eb;
 }
 
 .notice.important .notice-icon {
@@ -1330,7 +1329,7 @@ onBeforeUnmount(() => {
   color: #6b7280;
 }
 
-/* Filtros com fundo branco */
+/* Filtros com fundo original e sem hover */
 .mobile-filter-toggle {
   display: none;
 }
@@ -1344,7 +1343,7 @@ onBeforeUnmount(() => {
 }
 
 .filter-button {
-  border: 2px solid #e5e7eb;
+  border: 2px solid #c7cdd4;
   background: #ffffff;
   color: #1f2937;
   border-radius: 10px;
@@ -1363,8 +1362,8 @@ onBeforeUnmount(() => {
 }
 
 .clear-filter-button {
-  border: 2px solid #e5e7eb;
-  background: #ffffff;
+  border: 2px solid #9ca3af;
+  background: #f9fafb;
   color: #374151;
   border-radius: 10px;
   padding: 11px 15px;
@@ -1424,7 +1423,7 @@ onBeforeUnmount(() => {
   background: #f9fafb;
 }
 
-/* Tag de categoria branca no cartão */
+/* Tag da categoria com fundo branco */
 .tag {
   position: absolute;
   top: 10px;
@@ -1679,7 +1678,7 @@ textarea {
 }
 
 footer {
-  background: #ffffff;
+  background: #f9fafb;
   border-top: 1px solid #e5e7eb;
   padding: 40px 20px;
   text-align: center;
@@ -1782,7 +1781,7 @@ footer small {
     gap: 16px;
     border-bottom: 1px solid #e5e7eb;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-    z-index: 100; /* Garante que fica acima do carrossel */
+    z-index: 100;
   }
 
   .nav-links.nav-open {
@@ -1804,7 +1803,7 @@ footer small {
     gap: 12px;
     margin: 0 0 10px;
     padding: 13px 15px;
-    border: 2px solid #e5e7eb;
+    border: 2px solid #c7cdd4;
     border-radius: 11px;
     background: #ffffff;
     color: #111827;
@@ -1824,9 +1823,9 @@ footer small {
     width: 100%;
     padding: 12px;
     margin-bottom: 18px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #d1d5db;
     border-radius: 12px;
-    background: #ffffff;
+    background: #f8fafc;
     box-shadow: 0 5px 18px rgba(17, 24, 39, 0.08);
   }
 
