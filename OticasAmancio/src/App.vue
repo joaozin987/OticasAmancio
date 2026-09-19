@@ -1118,7 +1118,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* Ajustes finais dos filtros do catálogo (Sem hover) */
+/* Ajustes dos filtros do catálogo (sem hover) */
 .mobile-filter-toggle {
   display: none;
 }
@@ -1225,6 +1225,7 @@ onBeforeUnmount(() => {
   transform: translateY(-9px) rotate(-45deg);
 }
 
+/* Responsivo para 768px, 400px e abaixo */
 @media (max-width: 768px) {
   .nav {
     position: relative;
@@ -1294,10 +1295,14 @@ onBeforeUnmount(() => {
     display: flex;
   }
 
+  /* Mantém 2 colunas organizadas tanto em 700px quanto em 400px */
   .filter-button {
     flex: 1 1 calc(50% - 10px);
     min-height: 45px;
-    padding: 10px 12px;
+    padding: 10px 8px;
+    font-size: 0.88rem;
+    text-align: center;
+    box-sizing: border-box;
   }
 
   .clear-filter-button {
@@ -1307,9 +1312,21 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 390px) {
+/* Ajuste fino para 400px (mantendo exatamente a mesma lógica da de 700px) */
+@media (max-width: 430px) {
+  .filters {
+    gap: 8px;
+    padding: 10px;
+  }
+
   .filter-button {
-    flex-basis: 100%;
+    flex: 1 1 calc(50% - 8px);
+    font-size: 0.82rem;
+    padding: 9px 4px;
+  }
+
+  .mobile-filter-status {
+    font-size: 0.82rem;
   }
 }
 </style>
