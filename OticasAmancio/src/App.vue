@@ -1102,7 +1102,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   stopCarousel();
 });
-</script>
 <style scoped>
 /* Ajustes finais dos filtros do catálogo */
 .mobile-filter-toggle {
@@ -1126,13 +1125,6 @@ onBeforeUnmount(() => {
   font-weight: 700;
   line-height: 1.2;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
-}
-
-.filter-button:hover {
-  border-color: #111827;
-  background: #f3f4f6;
-  transform: translateY(-1px);
 }
 
 .filter-button.active {
@@ -1151,13 +1143,6 @@ onBeforeUnmount(() => {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.clear-filter-button:hover {
-  border-color: #374151;
-  background: #e5e7eb;
-  color: #111827;
 }
 
 .mobile-filter-label {
