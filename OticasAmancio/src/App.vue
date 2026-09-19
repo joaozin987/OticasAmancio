@@ -1230,107 +1230,95 @@ onBeforeUnmount(() => {
    Ajustes Mobile: 768px até telas ultra-compactas (<= 400px)
    ========================================================== */
 /* ==========================================================
-   Header Mobile ajustado:
-   - Usa var(--body-bg) para nunca destoar da cor
-   - Logo cravada na esquerda e botão 'X' na direita
-   - Menu aberto EMPURRA o conteúdo (sem tapar o título)
-   - Espaçamento claro antes do 'Selecione a armação ideal'
+   Header Mobile Final:
+   - Cor 100% idêntica ao body (transparente)
+   - Logo maior e alinhada à esquerda
+   - Botão X na mesma linha, na extrema direita
+   - Botões empurram o conteúdo com espaçamento perfeito
    ========================================================== */
 @media (max-width: 768px) {
   .site-header {
-    width: 100%;
-    position: relative;
-    background-color: var(--body-bg) !important;
+    width: 100% !important;
+    position: relative !important;
+    background-color: transparent !important; /* Herda exatamente a cor do body */
+    border: none !important;
   }
 
   .nav {
     display: flex !important;
-    flex-wrap: wrap !important; /* Permite que o menu desça para a linha de baixo */
+    flex-wrap: wrap !important;
+    flex-direction: row !important;
     align-items: center !important;
-    justify-content: space-between !important;
+    justify-content: space-between !important; /* Garante extremos: Logo na ponta esquerda, X na ponta direita */
     width: 100% !important;
-    padding: 14px 18px 8px 18px !important;
+    padding: 16px 18px 8px 18px !important;
     box-sizing: border-box !important;
-    background-color: var(--body-bg) !important;
+    background-color: transparent !important;
   }
 
-  /* Logo fixa na extrema esquerda */
+  /* Logo grande e colada à esquerda */
   .header-logo {
     display: flex !important;
     align-items: center !important;
+    justify-content: flex-start !important;
     margin: 0 !important;
-    flex: 0 0 auto !important;
+    flex: 0 0 auto !important; /* Não deixa ocupar a largura toda */
+    width: auto !important;
   }
 
   .header-logo img {
-    height: 46px !important;
+    height: 60px !important; /* Logo maior e bem visível */
     width: auto !important;
+    max-width: none !important;
     display: block !important;
     object-fit: contain;
   }
 
-  /* Botão X / Hambúrguer na extrema direita */
+  /* Botão X / Hambúrguer cravado na direita e alinhado ao centro vertical da logo */
   .mobile-menu-toggle {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    width: 26px !important;
+    width: 28px !important;
     height: 20px !important;
     padding: 0 !important;
-    margin: 0 !important;
+    margin: 0 0 0 auto !important; /* Trava na ponta direita */
     background: transparent !important;
     border: none !important;
     cursor: pointer !important;
     flex-shrink: 0 !important;
-    z-index: 10;
   }
 
-  /* 
-    Menu Aberto: 
-    Muda de absolute para static/relativo, EMPURRANDO o hero 
-    para baixo em vez de ficar por cima do texto
-  */
+  /* Gaveta aberta que empurra o conteúdo */
   .nav-links {
     display: none;
     width: 100% !important;
-    position: static !important; /* Tira o absolute que causava a sobreposição */
+    position: static !important;
     box-sizing: border-box !important;
     flex-direction: column !important;
-    padding: 16px 0 20px 0 !important; /* Espaçamento interno dos botões */
+    padding: 20px 0 10px 0 !important;
     gap: 12px !important;
-    margin-bottom: 24px !important; /* Dá o respiro para o 'Selecione a armação ideal' aparecer limpo embaixo */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Linha sutil de divisão */
-    background-color: var(--body-bg) !important;
+    margin-bottom: 24px !important; /* Respiro para o texto "Selecione a armação ideal" */
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(44, 51, 40, 0.12); /* Divisória sutil na mesma paleta */
   }
 
   .nav-links.nav-open {
     display: flex !important;
   }
-
-  .nav-links a {
-    width: 100% !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-    padding: 12px 16px !important;
-    border-radius: 8px !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    display: block !important;
-  }
 }
 
-/* Telas de 400px ou menos (iPhone SE) */
+/* Telas de 400px ou menores (ex: iPhone SE 375px) */
 @media (max-width: 400px) {
   .nav {
-    padding: 12px 14px 6px 14px !important;
+    padding: 14px 16px 6px 16px !important;
   }
 
   .header-logo img {
-    height: 42px !important;
+    height: 56px !important; /* Tamanho calibrado para não espremer a tela */
   }
 
   .nav-links {
-    padding: 14px 0 18px 0 !important;
     margin-bottom: 20px !important;
   }
 }
