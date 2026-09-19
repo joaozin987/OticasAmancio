@@ -81,16 +81,50 @@
         <p>Toque em uma categoria para ver os modelos e depois escolha a armação para enviar a receita.</p>
       </div>
 
-      <div class="filters" role="tablist" aria-label="Categorias de armações">
+      <button
+        class="mobile-filter-toggle"
+        type="button"
+        :aria-expanded="String(isMobileFiltersOpen)"
+        aria-controls="catalog-filters"
+        @click="isMobileFiltersOpen = !isMobileFiltersOpen"
+      >
+        <span class="mobile-filter-label">
+          <span class="mobile-filter-icon" aria-hidden="true">☰</span>
+          Filtros
+        </span>
+        <span class="mobile-filter-status">
+          {{ activeFilter === "todos" ? "Todos" : categories[activeFilter] }}
+          <span class="mobile-filter-chevron" :class="{ rotated: isMobileFiltersOpen }" aria-hidden="true">⌄</span>
+        </span>
+      </button>
+
+      <div
+        id="catalog-filters"
+        class="filters"
+        :class="{ 'mobile-open': isMobileFiltersOpen }"
+        role="tablist"
+        aria-label="Categorias de armações"
+      >
         <button
           v-for="filter in filters"
           :key="filter.value"
           class="filter-button"
           :class="{ active: activeFilter === filter.value }"
           type="button"
-          @click="activeFilter = filter.value"
+          role="tab"
+          :aria-selected="String(activeFilter === filter.value)"
+          @click="selectFilter(filter.value)"
         >
           {{ filter.label }}
+        </button>
+
+        <button
+          v-if="activeFilter !== 'todos'"
+          class="clear-filter-button"
+          type="button"
+          @click="selectFilter('todos')"
+        >
+          Limpar filtro
         </button>
       </div>
 
@@ -205,6 +239,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 const whatsappNumber = "5582991200198";
 const orderIntentText = "Enviar meu grau e receber avaliação";
 const activeFilter = ref("todos");
+const isMobileFiltersOpen = ref(false);
 const selectedProduct = ref(null);
 const isOrderPanelOpen = ref(false);
 const galleryProduct = ref(null);
@@ -252,8 +287,6 @@ const selectGalleryImage = (index) => {
 };
 const categories = {
   polarizadas: "Polarizadas",
-  "feminina-acetato": "Feminina acetato",
-  "feminina-metal": "Feminina metal",
   "masculina-metal": "Masculina metal",
   "masculina-acetato": "Masculina acetato",
   "masculina-classica": "Masculina clássica",
@@ -930,6 +963,11 @@ const filters = computed(() => [
   ...Object.entries(categories).map(([value, label]) => ({ value, label }))
 ]);
 
+const selectFilter = (value) => {
+  activeFilter.value = value;
+  isMobileFiltersOpen.value = false;
+};
+
 const filteredProducts = computed(() => {
   if (activeFilter.value === "todos") return products;
   return products.filter((product) => product.category === activeFilter.value);
@@ -1065,3 +1103,150 @@ onBeforeUnmount(() => {
   stopCarousel();
 });
 </script>
+<style scoped>
+/* Ajustes finais dos filtros do catálogo */
+.mobile-filter-toggle {
+  display: none;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-button {
+  border: 2px solid #c7cdd4;
+  background: #ffffff;
+  color: #1f2937;
+  border-radius: 10px;
+  padding: 11px 17px;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.filter-button:hover {
+  border-color: #111827;
+  background: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+.filter-button.active {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(17, 24, 39, 0.18);
+}
+
+.clear-filter-button {
+  border: 2px solid #9ca3af;
+  background: #f9fafb;
+  color: #374151;
+  border-radius: 10px;
+  padding: 11px 15px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.clear-filter-button:hover {
+  border-color: #374151;
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.mobile-filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.mobile-filter-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.mobile-filter-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4b5563;
+}
+
+.mobile-filter-chevron {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.mobile-filter-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  .mobile-filter-toggle {
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 10px;
+    padding: 13px 15px;
+    border: 2px solid #c7cdd4;
+    border-radius: 11px;
+    background: #ffffff;
+    color: #111827;
+    font: inherit;
+    font-weight: 800;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(17, 24, 39, 0.06);
+  }
+
+  .mobile-filter-toggle:active {
+    transform: scale(0.99);
+  }
+
+  .filters {
+    display: none;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background: #f8fafc;
+    box-shadow: 0 5px 18px rgba(17, 24, 39, 0.08);
+  }
+
+  .filters.mobile-open {
+    display: flex;
+  }
+
+  .filter-button {
+    flex: 1 1 calc(50% - 10px);
+    min-height: 45px;
+    padding: 10px 12px;
+  }
+
+  .clear-filter-button {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 390px) {
+  .filter-button {
+    flex-basis: 100%;
+  }
+}
+</style>
