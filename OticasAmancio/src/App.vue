@@ -257,6 +257,7 @@ const selectedProduct = ref(null);
 const isOrderPanelOpen = ref(false);
 const currentFeaturedIndex = ref(0);
 const lightboxImage = ref(null);
+const isMobileNavOpen = ref(false);
 let carouselTimer = null;
 
 const openImage = (src) => {
@@ -1101,6 +1102,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative; /* Garante que o menu suspenso abre alinhado à barra */
 }
 
 .header-logo img {
@@ -1719,13 +1721,80 @@ footer small {
   font-size: 1.1rem;
 }
 
+/* Botão Menu Hambúrguer (Oculto no Desktop) */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 32px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 101;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-menu-toggle .bar {
+  width: 100%;
+  height: 3px;
+  background-color: #111827;
+  border-radius: 4px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Animação do 'X' ao abrir */
+.mobile-menu-toggle .bar-top {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.mobile-menu-toggle .bar-mid {
+  opacity: 0;
+}
+
+.mobile-menu-toggle .bar-bot {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
 @media (max-width: 768px) {
   .hero {
     grid-template-columns: 1fr;
   }
+
   .notice-grid {
     grid-template-columns: 1fr;
   }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    z-index: 100; /* Garante que fica acima do carrossel */
+  }
+
+  .nav-links.nav-open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+  }
+
   .mobile-filter-toggle {
     width: 100%;
     min-height: 50px;
