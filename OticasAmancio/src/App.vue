@@ -1,17 +1,32 @@
 <template>
-  <header class="site-header" id="inicio">
+ <header class="site-header" id="inicio">
     <nav class="nav">
       <div class="header-logo">
         <img :src="logoSrc" alt="Logo Ótica Amancio">
       </div>
 
-      <div class="nav-links">
-        <a href="#catalogo" class="cata">Catálogo</a>
+      <!-- Botão Hambúrguer Mobile -->
+      <button
+        class="mobile-menu-toggle"
+        type="button"
+        :aria-expanded="String(isMobileNavOpen)"
+        aria-label="Abrir menu de navegação"
+        @click="isMobileNavOpen = !isMobileNavOpen"
+      >
+        <span class="bar" :class="{ 'bar-top': isMobileNavOpen }"></span>
+        <span class="bar" :class="{ 'bar-mid': isMobileNavOpen }"></span>
+        <span class="bar" :class="{ 'bar-bot': isMobileNavOpen }"></span>
+      </button>
+
+      <!-- Links de Navegação (Desktop e gaveta Mobile) -->
+      <div class="nav-links" :class="{ 'nav-open': isMobileNavOpen }">
+        <a href="#catalogo" class="cata" @click="isMobileNavOpen = false">Catálogo</a>
         <a
           class="whatsapp-link"
           :href="quickWhatsAppLink"
           target="_blank"
           rel="noopener"
+          @click="isMobileNavOpen = false"
         >
           WhatsApp
         </a>
@@ -77,12 +92,60 @@
       <div class="section-heading">
         <p class="eyebrow">Catálogo</p>
         <h2>Nossas Armações</h2>
-        <p>Escolha a armação desejada para nos enviar sua receita.</p>
+        <p>Toque em uma categoria para ver os modelos e depois escolha a armação para enviar a receita.</p>
       </div>
 
-      <div v-if="products.length" class="catalog-grid" aria-live="polite">
-        <article v-for="product in products" :key="product.id" class="product-card">
+      <button
+        class="mobile-filter-toggle"
+        type="button"
+        :aria-expanded="String(isMobileFiltersOpen)"
+        aria-controls="catalog-filters"
+        @click="isMobileFiltersOpen = !isMobileFiltersOpen"
+      >
+        <span class="mobile-filter-label">
+          <span class="mobile-filter-icon" aria-hidden="true">☰</span>
+          Filtros
+        </span>
+        <span class="mobile-filter-status">
+          {{ activeFilter === "todos" ? "Todos" : categories[activeFilter] }}
+          <span class="mobile-filter-chevron" :class="{ rotated: isMobileFiltersOpen }" aria-hidden="true">⌄</span>
+        </span>
+      </button>
+
+      <div
+        id="catalog-filters"
+        class="filters"
+        :class="{ 'mobile-open': isMobileFiltersOpen }"
+        role="tablist"
+        aria-label="Categorias de armações"
+      >
+        <button
+          v-for="filter in filters"
+          :key="filter.value"
+          class="filter-button"
+          :class="{ active: activeFilter === filter.value }"
+          type="button"
+          role="tab"
+          :aria-selected="String(activeFilter === filter.value)"
+          @click="selectFilter(filter.value)"
+        >
+          {{ filter.label }}
+        </button>
+
+        <button
+          v-if="activeFilter !== 'todos'"
+          class="clear-filter-button"
+          type="button"
+          @click="selectFilter('todos')"
+        >
+          Limpar filtro
+        </button>
+      </div>
+
+      <div v-if="filteredProducts.length" class="catalog-grid" aria-live="polite">
+        <article v-for="product in filteredProducts" :key="product.id" class="product-card">
           <div class="product-media">
+            <span class="tag">{{ categories[product.category] }}</span>
             <img :src="product.image" :alt="product.name" @click="openImage(product.image)">
           </div>
           <div class="product-content">
@@ -100,7 +163,7 @@
         </article>
       </div>
 
-      <p v-else class="empty-state">Nenhuma armação cadastrada no momento.</p>
+      <p v-else class="empty-state">Nenhuma armação encontrada nesta categoria.</p>
     </section>
   </main>
 
@@ -112,6 +175,7 @@
         <div>
           <p class="eyebrow">Armação escolhida</p>
           <h2 id="orderTitle">{{ selectedProduct.name }}</h2>
+          <p class="selected-category-text">{{ categories[selectedProduct.category] }}</p>
         </div>
       </div>
 
@@ -187,6 +251,8 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 const whatsappNumber = "5582991200198";
 const orderIntentText = "Enviar meu grau e receber avaliação";
+const activeFilter = ref("todos");
+const isMobileFiltersOpen = ref(false);
 const selectedProduct = ref(null);
 const isOrderPanelOpen = ref(false);
 const currentFeaturedIndex = ref(0);
@@ -201,6 +267,15 @@ const closeImage = () => {
   lightboxImage.value = null;
 };
 
+const categories = {
+  polarizadas: "Polarizadas",
+  "masculina-metal": "Masculina metal",
+  "masculina-acetato": "Masculina acetato",
+  "masculina-classica": "Masculina clássica",
+  "masculina-oakley": "Masculina esportiva",
+  unissex: "Unissex"
+};
+
 const imagePath = (fileName) => new URL(`../img/${fileName}`, import.meta.url).href;
 const logoSrc = imagePath("logo-kim-otica.png");
 
@@ -208,548 +283,626 @@ const products = [
   {
     id: "oa-m001",
     name: "Dobravel 1",
+    category: "masculina-acetato",
     image: imagePath("masc-acetato-dobravel-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação em acetato, resistente e confortável para uso diário."
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
   },
   {
     id: "oa-m002",
     name: "Dobravel 2",
+    category: "masculina-acetato",
     image: imagePath("masc-acetato-dobravel-2.jpg"),
     price: "R$ 120,00",
-    description: "Armação em acetato, resistente e confortável para uso diário."
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
   },
   {
     id: "oa-m003",
     name: "Oakley Pitchman MARROM",
+    category: "masculina-acetato",
     image: imagePath("masc-acetato-oakley-pitchman-marrom.jpg"),
     price: "R$ 120,00",
-    description: "Armação em acetato, resistente e confortável para uso diário."
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
   },
   {
     id: "oa-m004",
     name: "Oakley Pitchman PRETO",
+    category: "masculina-acetato",
     image: imagePath("masc-acetato-oakley-pitchman-preto.jpg"),
     price: "R$ 120,00",
-    description: "Armação em acetato, resistente e confortável para uso diário."
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
   },
   {
     id: "oa-m005",
     name: "Estilo Juliete",
+    category: "masculina-classica",
     image: imagePath("masc-estilo-juliete-estilo-juliete.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m006",
     name: "Juliete",
+    category: "masculina-classica",
     image: imagePath("masc-juliete-juliete.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m007",
     name: "Metal Fina Prata Climpom(Preto)(Marrom)",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-fina-prata-climpom-preto-marrom.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m008",
     name: "Metal Prada 1",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-prada-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m009",
     name: "Metal Prada 2",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-prada-2.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m010",
     name: "Metal Prata Clipom (Preto)(Night Drive)",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-prata-clipom-preto-night-drive.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m011",
     name: "Metal Prata Clipom Preto",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-prata-clipom-preto.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m012",
     name: "Metal Prata Semiflutuante Clipom Preto",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-prata-semiflutuante-clipom-preto.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m013",
     name: "Metal Preta 2 Clipom Preto",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-preta-2-clipom-preto.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m014",
     name: "Metal Preta Clipom (Preto)(Night Drive)",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-preta-clipom-preto-night-drive.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m015",
     name: "Metal Preta Clipom Preto",
+    category: "masculina-metal",
     image: imagePath("masc-metal-metal-preta-clipom-preto.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m016",
     name: "Oakley Prata Semi Flutuante",
+    category: "masculina-metal",
     image: imagePath("masc-metal-oakley-prata-semi-flutuante.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m017",
     name: "Ray Ban",
+    category: "masculina-metal",
     image: imagePath("masc-metal-ray-ban.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m018",
     name: "Rayban +Ferrari",
+    category: "masculina-metal",
     image: imagePath("masc-metal-rayban-ferrari.jpg"),
     price: "R$ 120,00",
-    description: "Armação em metal, leve e com acabamento resistente."
+    description: "Armação masculina em metal, leve e com acabamento resistente."
   },
   {
     id: "oa-m019",
     name: "Oakley Batwolf",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-batwolf-oakley-batwolf.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m020",
     name: "Oakley Eye Jacket Azul Claro",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-eye-jacket-oakley-eye-jacket-azul-claro.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m021",
     name: "Oakley Eye Jacket Azul Escuro",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-eye-jacket-oakley-eye-jacket-azul-escuro.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m022",
     name: "Oakley Plate 1 Azul Claro",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-oakley-plate-1-azul-claro.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m023",
     name: "Oakley Plate Amarelo",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-oakley-plate-amarelo.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m024",
     name: "Oakley Plate Azul Claro Com Detalhe Verde",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-oakley-plate-azul-claro-com-detalhe-verde.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m025",
     name: "Oakley Plate Azul Escuro",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-oakley-plate-azul-escuro.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m026",
     name: "Oakley Plate Prata",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-oakley-plate-prata.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m027",
     name: "Oakley Plate Modelo 1",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m028",
     name: "Oakley Plate Modelo 2",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-2.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m029",
     name: "Oakley Plate Modelo 3",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-3.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m030",
     name: "Oakley Plate Modelo 4",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-4.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m031",
     name: "Oakley Plate Modelo 5",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-5.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m032",
     name: "Oakley Plate Modelo 6",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-6.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m033",
     name: "Oakley Plate Modelo 7",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-7.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m034",
     name: "Oakley Plate Modelo 8",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-8.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m035",
     name: "Oakley Plate Modelo 9",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-9.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m036",
     name: "Oakley Plate Modelo 10",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-plate-modelo-10.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m037",
     name: "Oakley Radar Prateado",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-radar-oakley-radar-prateado.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m038",
     name: "Oakley Radar Preto Azulado",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-radar-oakley-radar-preto-azulado.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m039",
     name: "Oakley Radar Preto-Prata",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-radar-oakley-radar-preto-prata.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m040",
     name: "Oakley Radar Total Black",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-radar-oakley-radar-total-black.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m041",
     name: "Oakley 1",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-twoface-oakley-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m042",
     name: "Vilão 1",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-vilao-vilao-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m043",
     name: "Vilão 2",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-vilao-vilao-2.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m044",
     name: "Vilão 3",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-vilao-vilao-3.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m045",
     name: "Vilão 4",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-vilao-vilao-4.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m046",
     name: "Vilão 5",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-vilao-vilao-5.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m047",
     name: "Vilão 6",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-vilao-vilao-6.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m048",
     name: "Vilão 7",
+    category: "masculina-oakley",
     image: imagePath("masc-oakley-vilao-vilao-7.jpg"),
     price: "R$ 120,00",
-    description: "Armação esportiva, ideal para quem busca resistência e estilo."
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
   },
   {
     id: "oa-m049",
     name: "Oakley 1",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-oakley-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m050",
     name: "Oakley 2",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-oakley-2.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m051",
     name: "Oakley 3",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-oakley-3.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m052",
     name: "Oakley 4",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-oakley-4.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m053",
     name: "Oakley 5",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-oakley-5.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m054",
     name: "Oakley 6",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-oakley-6.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m055",
     name: "Parafusada 1",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-parafusada-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m056",
     name: "Parafusada 2",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-parafusada-2.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m057",
     name: "Parafusada 3",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-parafusada-3.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-m058",
     name: "Parafusada 4",
+    category: "masculina-classica",
     image: imagePath("masc-parafusada-parafusada-4.jpg"),
     price: "R$ 120,00",
-    description: "Armação de estilo clássico, confortável para uso prolongado."
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
   },
   {
     id: "oa-u059",
     name: "Modelo 1",
+    category: "unissex",
     image: imagePath("uni-modelo-1.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u060",
     name: "Modelo 2",
+    category: "unissex",
     image: imagePath("uni-modelo-2.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u061",
     name: "Modelo 3",
+    category: "unissex",
     image: imagePath("uni-modelo-3.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u062",
     name: "Modelo 4",
+    category: "unissex",
     image: imagePath("uni-modelo-4.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u063",
     name: "Modelo 5",
+    category: "unissex",
     image: imagePath("uni-modelo-5.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u064",
     name: "Modelo 6",
+    category: "unissex",
     image: imagePath("uni-modelo-6.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u065",
     name: "Modelo 7",
+    category: "unissex",
     image: imagePath("uni-modelo-7.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u066",
     name: "Modelo 8",
+    category: "unissex",
     image: imagePath("uni-modelo-8.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u067",
     name: "Modelo 9",
+    category: "unissex",
     image: imagePath("uni-modelo-9.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u068",
     name: "Modelo 10",
+    category: "unissex",
     image: imagePath("uni-modelo-10.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u069",
     name: "Modelo 11",
+    category: "unissex",
     image: imagePath("uni-modelo-11.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u070",
     name: "Modelo 12",
+    category: "unissex",
     image: imagePath("uni-modelo-12.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u071",
     name: "Modelo 13",
+    category: "unissex",
     image: imagePath("uni-modelo-13.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u072",
     name: "Modelo 14",
+    category: "unissex",
     image: imagePath("uni-modelo-14.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u073",
     name: "Modelo 15",
+    category: "unissex",
     image: imagePath("uni-modelo-15.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u074",
     name: "Modelo 16",
+    category: "unissex",
     image: imagePath("uni-modelo-16.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u075",
     name: "Modelo 18",
+    category: "unissex",
     image: imagePath("uni-modelo-18.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u076",
     name: "Modelo 19",
+    category: "unissex",
     image: imagePath("uni-modelo-19.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u077",
     name: "Modelo 20",
+    category: "unissex",
     image: imagePath("uni-modelo-20.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u078",
     name: "Modelo 21",
+    category: "unissex",
     image: imagePath("uni-modelo-21.jpg"),
     price: "R$ 120,00",
-    description: "Armação versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   }
 ];
 
@@ -787,6 +940,21 @@ const initialPrescriptionForm = () => ({
 });
 
 const form = ref(initialPrescriptionForm());
+
+const filters = computed(() => [
+  { value: "todos", label: "Todos" },
+  ...Object.entries(categories).map(([value, label]) => ({ value, label }))
+]);
+
+const selectFilter = (value) => {
+  activeFilter.value = value;
+  isMobileFiltersOpen.value = false;
+};
+
+const filteredProducts = computed(() => {
+  if (activeFilter.value === "todos") return products;
+  return products.filter((product) => product.category === activeFilter.value);
+});
 
 const formatDegree = (value, showPlus = true) => {
   if (value === 0) return "0.00";
@@ -884,6 +1052,7 @@ const sendOrder = () => {
     orderIntentText,
     "",
     `Armação escolhida: ${selectedProduct.value.name}`,
+    `Categoria: ${categories[selectedProduct.value.category]}`,
     `Imagem: ${selectedProduct.value.image}`,
     "Review da imagem: quero que vocês avaliem essa armação pela imagem e me orientem se ela combina com meu rosto e com o meu grau.",
     "",
@@ -1016,12 +1185,13 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #f3f4f6;
+  background: #ffffff;
   color: #111827;
   padding: 12px 20px;
   border-radius: 8px;
   font-weight: 700;
   text-decoration: none;
+  border: 1px solid #e5e7eb;
 }
 
 .hero-carousel {
@@ -1100,7 +1270,7 @@ onBeforeUnmount(() => {
   gap: 16px;
   padding: 20px;
   border-radius: 12px;
-  background: #f9fafb;
+  background: #ffffff;
   border: 1px solid #e5e7eb;
 }
 
@@ -1118,7 +1288,7 @@ onBeforeUnmount(() => {
   justify-content: center;
   font-weight: 800;
   flex-shrink: 0;
-  background: #e5e7eb;
+  background: #f3f4f6;
 }
 
 .notice.important .notice-icon {
@@ -1158,6 +1328,80 @@ onBeforeUnmount(() => {
   color: #6b7280;
 }
 
+/* Filtros com fundo branco */
+.mobile-filter-toggle {
+  display: none;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.filter-button {
+  border: 2px solid #e5e7eb;
+  background: #ffffff;
+  color: #1f2937;
+  border-radius: 10px;
+  padding: 11px 17px;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.filter-button.active {
+  border-color: #111827;
+  background: #111827;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(17, 24, 39, 0.18);
+}
+
+.clear-filter-button {
+  border: 2px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  border-radius: 10px;
+  padding: 11px 15px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mobile-filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.mobile-filter-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.mobile-filter-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4b5563;
+}
+
+.mobile-filter-chevron {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.mobile-filter-chevron.rotated {
+  transform: rotate(180deg);
+}
+
 .catalog-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1176,6 +1420,22 @@ onBeforeUnmount(() => {
 .product-media {
   position: relative;
   background: #f9fafb;
+}
+
+/* Tag de categoria branca no cartão */
+.tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  z-index: 2;
 }
 
 .product-media img {
@@ -1311,6 +1571,12 @@ onBeforeUnmount(() => {
   border-radius: 8px;
 }
 
+.selected-category-text {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
 fieldset {
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -1411,7 +1677,7 @@ textarea {
 }
 
 footer {
-  background: #f9fafb;
+  background: #ffffff;
   border-top: 1px solid #e5e7eb;
   padding: 40px 20px;
   text-align: center;
@@ -1459,6 +1725,62 @@ footer small {
   }
   .notice-grid {
     grid-template-columns: 1fr;
+  }
+  .mobile-filter-toggle {
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 0 0 10px;
+    padding: 13px 15px;
+    border: 2px solid #e5e7eb;
+    border-radius: 11px;
+    background: #ffffff;
+    color: #111827;
+    font: inherit;
+    font-weight: 800;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(17, 24, 39, 0.06);
+  }
+
+  .mobile-filter-toggle:active {
+    transform: scale(0.99);
+  }
+
+  .filters {
+    display: none;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 5px 18px rgba(17, 24, 39, 0.08);
+  }
+
+  .filters.mobile-open {
+    display: flex;
+  }
+
+  .filter-button {
+    flex: 1 1 calc(50% - 10px);
+    min-height: 45px;
+    padding: 10px 12px;
+  }
+
+  .clear-filter-button {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 390px) {
+  .filter-button {
+    flex-basis: 100%;
   }
 }
 </style>
