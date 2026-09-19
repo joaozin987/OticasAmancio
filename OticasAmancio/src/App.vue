@@ -1230,18 +1230,18 @@ onBeforeUnmount(() => {
    Ajustes Mobile: 768px até telas ultra-compactas (<= 400px)
    ========================================================== */
 /* ==========================================================
-   Header Mobile Final:
-   - Cor 100% idêntica ao body (transparente)
-   - Logo maior e alinhada à esquerda
-   - Botão X na mesma linha, na extrema direita
-   - Botões empurram o conteúdo com espaçamento perfeito
+   Header Mobile Verde Oficial (igual ao Desktop):
+   - Fundo verde oliva (#5b6f48)
+   - Logo maior na ponta esquerda
+   - Toggle hambúrguer/X branco na ponta direita
+   - Menu abre empurrando a seção hero com divisória
    ========================================================== */
 @media (max-width: 768px) {
   .site-header {
     width: 100% !important;
     position: relative !important;
-    background-color: transparent !important; /* Herda exatamente a cor do body */
-    border: none !important;
+    background-color: #5b6f48 !important; /* Cor verde oficial do seu desktop */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
   }
 
   .nav {
@@ -1249,32 +1249,30 @@ onBeforeUnmount(() => {
     flex-wrap: wrap !important;
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: space-between !important; /* Garante extremos: Logo na ponta esquerda, X na ponta direita */
+    justify-content: space-between !important;
     width: 100% !important;
-    padding: 16px 18px 8px 18px !important;
+    padding: 14px 18px !important;
     box-sizing: border-box !important;
-    background-color: transparent !important;
+    background-color: #5b6f48 !important;
   }
 
-  /* Logo grande e colada à esquerda */
+  /* Logo maior e cravada na esquerda */
   .header-logo {
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-start !important;
     margin: 0 !important;
-    flex: 0 0 auto !important; /* Não deixa ocupar a largura toda */
-    width: auto !important;
+    flex: 0 0 auto !important;
   }
 
   .header-logo img {
-    height: 60px !important; /* Logo maior e bem visível */
+    height: 54px !important; /* Logo grande e nítida */
     width: auto !important;
-    max-width: none !important;
+    max-width: 190px !important;
     display: block !important;
     object-fit: contain;
   }
 
-  /* Botão X / Hambúrguer cravado na direita e alinhado ao centro vertical da logo */
+  /* Botão Hambúrguer / X branco na ponta direita */
   .mobile-menu-toggle {
     display: flex !important;
     flex-direction: column !important;
@@ -1282,44 +1280,79 @@ onBeforeUnmount(() => {
     width: 28px !important;
     height: 20px !important;
     padding: 0 !important;
-    margin: 0 0 0 auto !important; /* Trava na ponta direita */
+    margin: 0 !important;
     background: transparent !important;
     border: none !important;
     cursor: pointer !important;
     flex-shrink: 0 !important;
+    z-index: 102;
   }
 
-  /* Gaveta aberta que empurra o conteúdo */
+  /* Cor branca nas barras para contrastar com o verde */
+  .mobile-menu-toggle .bar {
+    width: 100%;
+    height: 3px;
+    background-color: #ffffff !important;
+    border-radius: 4px;
+  }
+
+  /* Gaveta do menu aberta */
   .nav-links {
     display: none;
     width: 100% !important;
     position: static !important;
     box-sizing: border-box !important;
     flex-direction: column !important;
-    padding: 20px 0 10px 0 !important;
+    padding: 18px 0 10px 0 !important;
     gap: 12px !important;
-    margin-bottom: 24px !important; /* Respiro para o texto "Selecione a armação ideal" */
-    background-color: transparent !important;
-    border-bottom: 1px solid rgba(44, 51, 40, 0.12); /* Divisória sutil na mesma paleta */
+    background-color: #5b6f48 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.12) !important;
   }
 
   .nav-links.nav-open {
     display: flex !important;
   }
+
+  /* Estilização dos botões no estilo do tema */
+  .nav-links a {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    padding: 12px 16px !important;
+    border-radius: 25px !important; /* Arredondado igual aos botões do desktop */
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    display: block !important;
+    font-size: 0.95rem !important;
+    transition: all 0.2s ease;
+  }
+
+  .nav-links a.cata {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  }
+
+  .nav-links a.whatsapp-link {
+    background: #ffffff !important;
+    color: #5b6f48 !important;
+    border: 1px solid #ffffff !important;
+  }
 }
 
-/* Telas de 400px ou menores (ex: iPhone SE 375px) */
+/* Telas menores (iPhone SE / 400px e abaixo) */
 @media (max-width: 400px) {
   .nav {
-    padding: 14px 16px 6px 16px !important;
+    padding: 12px 14px !important;
   }
 
   .header-logo img {
-    height: 56px !important; /* Tamanho calibrado para não espremer a tela */
+    height: 48px !important;
   }
 
-  .nav-links {
-    margin-bottom: 20px !important;
+  .mobile-menu-toggle {
+    width: 26px !important;
+    height: 18px !important;
   }
 }
 </style>
