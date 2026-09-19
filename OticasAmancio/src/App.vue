@@ -1230,55 +1230,60 @@ onBeforeUnmount(() => {
    Ajustes Mobile: 768px até telas ultra-compactas (<= 400px)
    ========================================================== */
 /* ==========================================================
-   Ajuste do Header Mobile (mesma linha, cores mantidas)
+   Header Mobile: Logo na esquerda, Toggle na direita
+   Menu gaveta com fundo opaco, divisória e padding
    ========================================================== */
 @media (max-width: 768px) {
   .site-header {
-    width: 100%;
     position: relative;
-    /* Removemos qualquer background forçado aqui para preservar o do seu tema */
+    width: 100%;
+    z-index: 100;
+    background-color: var(--header-bg, #f5f0e6); /* Cor de fundo do seu tema */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08); /* Linha divisória sutil com o Hero */
   }
 
   .nav {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: space-between !important; /* Logo na esquerda, toggle na direita */
+    justify-content: space-between !important; /* Logo na esquerda e toggle na direita */
     width: 100% !important;
     padding: 12px 18px !important;
     box-sizing: border-box !important;
   }
 
+  /* Trava a logo na esquerda */
   .header-logo {
     display: flex !important;
     align-items: center !important;
-    flex: 0 0 auto !important; /* Impede a logo de tomar 100% e quebrar a linha */
+    margin: 0 !important;
+    flex: 0 0 auto !important;
   }
 
   .header-logo img {
-    height: 52px !important; /* Altura ideal para a logo circular ficar legível */
+    height: 48px !important; /* Altura ideal para o círculo da marca */
     width: auto !important;
-    max-width: none !important;
+    display: block !important;
     object-fit: contain;
-    display: block;
   }
 
+  /* Botão Hambúrguer cravado na direita */
   .mobile-menu-toggle {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
     width: 28px !important;
     height: 20px !important;
+    padding: 0 !important;
+    margin: 0 !important;
     background: transparent !important;
     border: none !important;
     cursor: pointer !important;
-    padding: 0 !important;
-    margin: 0 !important;
     flex-shrink: 0 !important;
-    z-index: 101;
+    z-index: 102;
   }
 
-  /* Gaveta de navegação suspensa */
+  /* Menu aberto (Gaveta) */
   .nav-links {
     display: none;
     position: absolute;
@@ -1287,31 +1292,55 @@ onBeforeUnmount(() => {
     width: 100%;
     box-sizing: border-box;
     flex-direction: column;
-    padding: 16px 20px;
+    padding: 20px 18px !important; /* Padding confortável para os botões respirarem */
     gap: 12px;
-    z-index: 100;
-    background: inherit; /* Mantém a mesma cor de fundo do header */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    z-index: 101;
+    background-color: #f5f0e6; /* IMPORTANTE: Fundo opaco para não vazar as letras do hero */
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1); /* Divisória marcando o fim do menu */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08); /* Sombra separando da seção abaixo */
   }
 
   .nav-links.nav-open {
-    display: flex;
+    display: flex !important;
+  }
+
+  /* Estilização dos botões/links dentro da gaveta */
+  .nav-links a {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* Seletor específico para o botão do catálogo no menu */
+  .nav-links a.cata {
+    background: #e9dfcf;
+    color: #2c3328;
+  }
+
+  /* Botão do WhatsApp no menu */
+  .nav-links a.whatsapp-link {
+    background: #25d366;
+    color: #ffffff;
   }
 }
 
-/* Telas menores (iPhone SE / 375px / 400px e abaixo) */
-@media (max-width: 430px) {
+/* Telas de 400px ou menos (iPhone SE / telas estreitas) */
+@media (max-width: 400px) {
   .nav {
-    padding: 10px 16px !important;
+    padding: 10px 14px !important;
   }
 
   .header-logo img {
-    height: 48px !important; /* Proporção equilibrada sem invadir o espaço */
+    height: 44px !important;
   }
 
-  .mobile-menu-toggle {
-    width: 26px !important;
-    height: 19px !important;
+  .nav-links {
+    padding: 16px 14px !important;
+    gap: 10px;
   }
 }
 </style>
