@@ -1229,163 +1229,88 @@ onBeforeUnmount(() => {
 /* ==========================================================
    Ajustes Mobile: 768px até telas ultra-compactas (<= 400px)
    ========================================================== */
+/* ==========================================================
+   Ajuste do Header Mobile (mesma linha, cores mantidas)
+   ========================================================== */
 @media (max-width: 768px) {
   .site-header {
-    position: relative;
     width: 100%;
-    background: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
+    position: relative;
+    /* Removemos qualquer background forçado aqui para preservar o do seu tema */
   }
 
   .nav {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Crava os lados opostos */
-    width: 100%;
-    padding: 12px 16px;
-    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important; /* Logo na esquerda, toggle na direita */
+    width: 100% !important;
+    padding: 12px 18px !important;
+    box-sizing: border-box !important;
   }
 
   .header-logo {
-    display: flex;
-    align-items: center;
-    flex: 1 1 auto;
+    display: flex !important;
+    align-items: center !important;
+    flex: 0 0 auto !important; /* Impede a logo de tomar 100% e quebrar a linha */
   }
 
   .header-logo img {
-    height: 40px; /* Mantém uma presença visual boa */
-    max-width: 180px;
-    width: auto;
+    height: 52px !important; /* Altura ideal para a logo circular ficar legível */
+    width: auto !important;
+    max-width: none !important;
     object-fit: contain;
     display: block;
   }
 
   .mobile-menu-toggle {
-    display: flex;
-    flex-shrink: 0;
-    margin-left: auto; /* Garante que fica colado na extrema direita */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 28px !important;
+    height: 20px !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+    z-index: 101;
   }
 
-  /* Gaveta suspensa do Menu Aberto */
+  /* Gaveta de navegação suspensa */
   .nav-links {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
-    background: #ffffff;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     flex-direction: column;
     padding: 16px 20px;
     gap: 12px;
     z-index: 100;
+    background: inherit; /* Mantém a mesma cor de fundo do header */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   }
 
   .nav-links.nav-open {
     display: flex;
   }
-
-  .nav-links a {
-    width: 100%;
-    box-sizing: border-box;
-    text-align: center;
-    padding: 12px 0;
-    display: block;
-  }
-
-  /* Filtros Mobile */
-  .mobile-filter-toggle {
-    width: 100%;
-    min-height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin: 0 0 10px;
-    padding: 13px 15px;
-    border: 2px solid #c7cdd4;
-    border-radius: 11px;
-    background: #ffffff;
-    color: #111827;
-    font: inherit;
-    font-weight: 800;
-    text-align: left;
-    cursor: pointer;
-    box-shadow: 0 2px 8px rgba(17, 24, 39, 0.06);
-    box-sizing: border-box;
-  }
-
-  .mobile-filter-toggle:active {
-    transform: scale(0.99);
-  }
-
-  .filters {
-    display: none;
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 18px;
-    border: 1px solid #d1d5db;
-    border-radius: 12px;
-    background: #f8fafc;
-    box-shadow: 0 5px 18px rgba(17, 24, 39, 0.08);
-    box-sizing: border-box;
-  }
-
-  .filters.mobile-open {
-    display: flex;
-  }
-
-  .filter-button {
-    flex: 1 1 calc(50% - 10px);
-    min-height: 45px;
-    padding: 10px 8px;
-    font-size: 0.88rem;
-    text-align: center;
-    box-sizing: border-box;
-  }
-
-  .clear-filter-button {
-    width: 100%;
-    min-height: 44px;
-    margin-top: 2px;
-    box-sizing: border-box;
-  }
 }
 
-/* Telas pequenas (400px e abaixo) */
-@media (max-width: 400px) {
+/* Telas menores (iPhone SE / 375px / 400px e abaixo) */
+@media (max-width: 430px) {
   .nav {
-    padding: 10px 14px;
+    padding: 10px 16px !important;
   }
 
-  /* Deixa a logo com tamanho ótimo e nítido sem amassar */
   .header-logo img {
-    height: 36px;
-    max-width: 160px;
+    height: 48px !important; /* Proporção equilibrada sem invadir o espaço */
   }
 
-  /* Hambúrguer com área de clique confortável e fixo na lateral */
   .mobile-menu-toggle {
-    width: 26px;
-    height: 18px;
-    margin-left: auto;
-  }
-
-  .filters {
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .filter-button {
-    flex: 1 1 calc(50% - 8px);
-    font-size: 0.82rem;
-    padding: 9px 4px;
-  }
-
-  .mobile-filter-status {
-    font-size: 0.82rem;
+    width: 26px !important;
+    height: 19px !important;
   }
 }
-</style>
