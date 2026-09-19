@@ -1102,12 +1102,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   stopCarousel();
 });
-<style scoped>
-/* Ajustes finais dos filtros do catálogo */
-.mobile-filter-toggle {
-  display: none;
-}
-
 .filters {
   display: flex;
   flex-wrap: wrap;
