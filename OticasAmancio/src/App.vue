@@ -1118,7 +1118,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-/* Ajustes dos filtros do catálogo (sem hover) */
+/* Ajustes dos filtros do catálogo */
 .mobile-filter-toggle {
   display: none;
 }
@@ -1191,13 +1191,13 @@ onBeforeUnmount(() => {
   transform: rotate(180deg);
 }
 
-/* Botão Menu Hambúrguer */
+/* Botão Menu Hambúrguer Base */
 .mobile-menu-toggle {
   display: none;
   flex-direction: column;
-  justify-content: space-around;
-  width: 30px;
-  height: 24px;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -1226,47 +1226,56 @@ onBeforeUnmount(() => {
   transform: translateY(-8px) rotate(-45deg);
 }
 
-/* Ajuste Responsivo do Header e Filtros para Mobile (768px, 400px e abaixo) */
+/* ==========================================================
+   Ajustes Mobile: 768px até telas ultra-compactas (<= 400px)
+   ========================================================== */
 @media (max-width: 768px) {
   .site-header {
     position: relative;
     width: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
   }
 
   .nav {
     position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between; /* Crava os lados opostos */
+    width: 100%;
     padding: 12px 16px;
     box-sizing: border-box;
   }
 
-  /* Ajuste de proporção da logo para não quebrar a barra */
   .header-logo {
     display: flex;
     align-items: center;
+    flex: 1 1 auto;
   }
 
   .header-logo img {
-    height: 36px;
-    max-width: 160px;
+    height: 40px; /* Mantém uma presença visual boa */
+    max-width: 180px;
     width: auto;
     object-fit: contain;
+    display: block;
   }
 
   .mobile-menu-toggle {
     display: flex;
     flex-shrink: 0;
+    margin-left: auto; /* Garante que fica colado na extrema direita */
   }
 
-  /* Gaveta do Menu Aberto no Mobile */
+  /* Gaveta suspensa do Menu Aberto */
   .nav-links {
     display: none;
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     flex-direction: column;
     padding: 16px 20px;
@@ -1345,15 +1354,23 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Telas menores (400px e abaixo) */
-@media (max-width: 430px) {
+/* Telas pequenas (400px e abaixo) */
+@media (max-width: 400px) {
   .nav {
     padding: 10px 14px;
   }
 
+  /* Deixa a logo com tamanho ótimo e nítido sem amassar */
   .header-logo img {
-    height: 32px;
-    max-width: 140px;
+    height: 36px;
+    max-width: 160px;
+  }
+
+  /* Hambúrguer com área de clique confortável e fixo na lateral */
+  .mobile-menu-toggle {
+    width: 26px;
+    height: 18px;
+    margin-left: auto;
   }
 
   .filters {
