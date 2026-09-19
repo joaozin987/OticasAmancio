@@ -246,7 +246,10 @@ const categories = {
   "feminina-acetato": "Feminina acetato",
   "feminina-metal": "Feminina metal",
   "masculina-metal": "Masculina metal",
-  "masculina-acetato": "Masculina acetato"
+  "masculina-acetato": "Masculina acetato",
+  "masculina-classica": "Masculina clássica",
+  "masculina-oakley": "Masculina esportiva",
+  unissex: "Unissex"
 };
 
 const imagePath = (fileName) => new URL(`../img/${fileName}`, import.meta.url).href;
@@ -372,6 +375,630 @@ const products = [
     image: imagePath("lzz.jpeg"),
     price: "Sob consulta",
     description: "Armação masculina em acetato com desenho atual e ótimo apoio no rosto."
+  },
+  {
+    id: "oa-m001",
+    name: "Dobravel 1",
+    category: "masculina-acetato",
+    image: imagePath("masc-acetato-dobravel-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-m002",
+    name: "Dobravel 2",
+    category: "masculina-acetato",
+    image: imagePath("masc-acetato-dobravel-2.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-m003",
+    name: "Oakley Pitchman MARROM",
+    category: "masculina-acetato",
+    image: imagePath("masc-acetato-oakley-pitchman-marrom.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-m004",
+    name: "Oakley Pitchman PRETO",
+    category: "masculina-acetato",
+    image: imagePath("masc-acetato-oakley-pitchman-preto.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em acetato, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-m005",
+    name: "Estilo Juliete",
+    category: "masculina-classica",
+    image: imagePath("masc-estilo-juliete-estilo-juliete.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m006",
+    name: "Juliete",
+    category: "masculina-classica",
+    image: imagePath("masc-juliete-juliete.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m007",
+    name: "Metal Fina Prata Climpom(Preto)(Marrom)",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-fina-prata-climpom-preto-marrom.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m008",
+    name: "Metal Prada 1",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-prada-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m009",
+    name: "Metal Prada 2",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-prada-2.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m010",
+    name: "Metal Prata Clipom (Preto)(Night Drive)",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-prata-clipom-preto-night-drive.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m011",
+    name: "Metal Prata Clipom Preto",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-prata-clipom-preto.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m012",
+    name: "Metal Prata Semiflutuante Clipom Preto",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-prata-semiflutuante-clipom-preto.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m013",
+    name: "Metal Preta 2 Clipom Preto",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-preta-2-clipom-preto.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m014",
+    name: "Metal Preta Clipom (Preto)(Night Drive)",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-preta-clipom-preto-night-drive.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m015",
+    name: "Metal Preta Clipom Preto",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-metal-preta-clipom-preto.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m016",
+    name: "Oakley Prata Semi Flutuante",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-oakley-prata-semi-flutuante.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m017",
+    name: "Ray Ban",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-ray-ban.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m018",
+    name: "Rayban +Ferrari",
+    category: "masculina-metal",
+    image: imagePath("masc-metal-rayban-ferrari.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina em metal, leve e com acabamento resistente."
+  },
+  {
+    id: "oa-m019",
+    name: "Oakley Batwolf",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-batwolf-oakley-batwolf.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m020",
+    name: "Oakley Eye Jacket Azul Claro",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-eye-jacket-oakley-eye-jacket-azul-claro.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m021",
+    name: "Oakley Eye Jacket Azul Escuro",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-eye-jacket-oakley-eye-jacket-azul-escuro.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m022",
+    name: "Oakley Plate 1 Azul Claro",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-oakley-plate-1-azul-claro.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m023",
+    name: "Oakley Plate Amarelo",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-oakley-plate-amarelo.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m024",
+    name: "Oakley Plate Azul Claro Com Detalhe Verde",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-oakley-plate-azul-claro-com-detalhe-verde.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m025",
+    name: "Oakley Plate Azul Escuro",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-oakley-plate-azul-escuro.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m026",
+    name: "Oakley Plate Prata",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-oakley-plate-prata.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m027",
+    name: "Oakley Plate Modelo 1",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m028",
+    name: "Oakley Plate Modelo 2",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-2.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m029",
+    name: "Oakley Plate Modelo 3",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-3.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m030",
+    name: "Oakley Plate Modelo 4",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-4.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m031",
+    name: "Oakley Plate Modelo 5",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-5.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m032",
+    name: "Oakley Plate Modelo 6",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-6.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m033",
+    name: "Oakley Plate Modelo 7",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-7.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m034",
+    name: "Oakley Plate Modelo 8",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-8.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m035",
+    name: "Oakley Plate Modelo 9",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-9.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m036",
+    name: "Oakley Plate Modelo 10",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-plate-modelo-10.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m037",
+    name: "Oakley Radar Prateado",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-radar-oakley-radar-prateado.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m038",
+    name: "Oakley Radar Preto Azulado",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-radar-oakley-radar-preto-azulado.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m039",
+    name: "Oakley Radar Preto-Prata",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-radar-oakley-radar-preto-prata.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m040",
+    name: "Oakley Radar Total Black",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-radar-oakley-radar-total-black.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m041",
+    name: "Oakley 1",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-twoface-oakley-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m042",
+    name: "Vilão 1",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-vilao-vilao-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m043",
+    name: "Vilão 2",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-vilao-vilao-2.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m044",
+    name: "Vilão 3",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-vilao-vilao-3.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m045",
+    name: "Vilão 4",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-vilao-vilao-4.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m046",
+    name: "Vilão 5",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-vilao-vilao-5.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m047",
+    name: "Vilão 6",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-vilao-vilao-6.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m048",
+    name: "Vilão 7",
+    category: "masculina-oakley",
+    image: imagePath("masc-oakley-vilao-vilao-7.jpg"),
+    price: "R$ 120,00",
+    description: "Armação esportiva masculina, ideal para quem busca resistência e estilo."
+  },
+  {
+    id: "oa-m049",
+    name: "Oakley 1",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-oakley-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m050",
+    name: "Oakley 2",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-oakley-2.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m051",
+    name: "Oakley 3",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-oakley-3.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m052",
+    name: "Oakley 4",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-oakley-4.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m053",
+    name: "Oakley 5",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-oakley-5.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m054",
+    name: "Oakley 6",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-oakley-6.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m055",
+    name: "Parafusada 1",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-parafusada-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m056",
+    name: "Parafusada 2",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-parafusada-2.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m057",
+    name: "Parafusada 3",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-parafusada-3.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-m058",
+    name: "Parafusada 4",
+    category: "masculina-classica",
+    image: imagePath("masc-parafusada-parafusada-4.jpg"),
+    price: "R$ 120,00",
+    description: "Armação masculina de estilo clássico, confortável para uso prolongado."
+  },
+  {
+    id: "oa-u059",
+    name: "Modelo 1",
+    category: "unissex",
+    image: imagePath("uni-modelo-1.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u060",
+    name: "Modelo 2",
+    category: "unissex",
+    image: imagePath("uni-modelo-2.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u061",
+    name: "Modelo 3",
+    category: "unissex",
+    image: imagePath("uni-modelo-3.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u062",
+    name: "Modelo 4",
+    category: "unissex",
+    image: imagePath("uni-modelo-4.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u063",
+    name: "Modelo 5",
+    category: "unissex",
+    image: imagePath("uni-modelo-5.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u064",
+    name: "Modelo 6",
+    category: "unissex",
+    image: imagePath("uni-modelo-6.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u065",
+    name: "Modelo 7",
+    category: "unissex",
+    image: imagePath("uni-modelo-7.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u066",
+    name: "Modelo 8",
+    category: "unissex",
+    image: imagePath("uni-modelo-8.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u067",
+    name: "Modelo 9",
+    category: "unissex",
+    image: imagePath("uni-modelo-9.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u068",
+    name: "Modelo 10",
+    category: "unissex",
+    image: imagePath("uni-modelo-10.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u069",
+    name: "Modelo 11",
+    category: "unissex",
+    image: imagePath("uni-modelo-11.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u070",
+    name: "Modelo 12",
+    category: "unissex",
+    image: imagePath("uni-modelo-12.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u071",
+    name: "Modelo 13",
+    category: "unissex",
+    image: imagePath("uni-modelo-13.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u072",
+    name: "Modelo 14",
+    category: "unissex",
+    image: imagePath("uni-modelo-14.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u073",
+    name: "Modelo 15",
+    category: "unissex",
+    image: imagePath("uni-modelo-15.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u074",
+    name: "Modelo 16",
+    category: "unissex",
+    image: imagePath("uni-modelo-16.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u075",
+    name: "Modelo 18",
+    category: "unissex",
+    image: imagePath("uni-modelo-18.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u076",
+    name: "Modelo 19",
+    category: "unissex",
+    image: imagePath("uni-modelo-19.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u077",
+    name: "Modelo 20",
+    category: "unissex",
+    image: imagePath("uni-modelo-20.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-u078",
+    name: "Modelo 21",
+    category: "unissex",
+    image: imagePath("uni-modelo-21.jpg"),
+    price: "R$ 120,00",
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
 ];
 
