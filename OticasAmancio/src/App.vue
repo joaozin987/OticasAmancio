@@ -2,21 +2,20 @@
   <header class="site-header" id="inicio">
     <nav class="nav">
       <div class="header-logo">
-    <img :src="logoSrc" alt="Logo Ótica Amancio">
-  </div>
+        <img :src="logoSrc" alt="Logo Ótica Amancio">
+      </div>
 
-  <div class="nav-links">
-    <a href="#catalogo" class="cata">Catálogo</a>
-    <a
-      class="whatsapp-link"
-      :href="quickWhatsAppLink"
-      target="_blank"
-      rel="noopener"
-    >
-      WhatsApp
-    </a>
-  </div>
-
+      <div class="nav-links">
+        <a href="#catalogo" class="cata">Catálogo</a>
+        <a
+          class="whatsapp-link"
+          :href="quickWhatsAppLink"
+          target="_blank"
+          rel="noopener"
+        >
+          WhatsApp
+        </a>
+      </div>
     </nav>
   </header>
 
@@ -169,7 +168,7 @@
         <fieldset>
           <legend>Envio da receita</legend>
           <label class="check-row">
-            <input type="checkbox" v-model="form.hasRecipePhoto" >
+            <input type="checkbox" v-model="form.hasRecipePhoto">
             Vou enviar foto da consulta/receita pelo WhatsApp
           </label>
           <label class="check-row">
@@ -235,7 +234,6 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
-
 const whatsappNumber = "5582991200198";
 const orderIntentText = "Enviar meu grau e receber avaliação";
 const activeFilter = ref("todos");
@@ -249,42 +247,43 @@ const lightboxImage = ref(null);
 let carouselTimer = null;
 
 const openImage = (src) => {
-    lightboxImage.value = src;
+  lightboxImage.value = src;
 };
 
 const closeImage = () => {
-    lightboxImage.value = null;
+  lightboxImage.value = null;
 };
 
 const openGallery = (product) => {
-    galleryProduct.value = product;
-    galleryImageIndex.value = 0;
+  galleryProduct.value = product;
+  galleryImageIndex.value = 0;
 };
 
 const closeGallery = () => {
-    galleryProduct.value = null;
-    galleryImageIndex.value = 0;
+  galleryProduct.value = null;
+  galleryImageIndex.value = 0;
 };
 
 const nextGalleryImage = () => {
-    if (!galleryProduct.value?.images?.length) return;
+  if (!galleryProduct.value?.images?.length) return;
 
-    galleryImageIndex.value =
-        (galleryImageIndex.value + 1) %
-        galleryProduct.value.images.length;
+  galleryImageIndex.value =
+    (galleryImageIndex.value + 1) %
+    galleryProduct.value.images.length;
 };
 
 const previousGalleryImage = () => {
-    if (!galleryProduct.value?.images?.length) return;
+  if (!galleryProduct.value?.images?.length) return;
 
-    galleryImageIndex.value =
-        (galleryImageIndex.value - 1 + galleryProduct.value.images.length) %
-        galleryProduct.value.images.length;
+  galleryImageIndex.value =
+    (galleryImageIndex.value - 1 + galleryProduct.value.images.length) %
+    galleryProduct.value.images.length;
 };
 
 const selectGalleryImage = (index) => {
-    galleryImageIndex.value = index;
+  galleryImageIndex.value = index;
 };
+
 const categories = {
   polarizadas: "Polarizadas",
   "masculina-metal": "Masculina metal",
@@ -1023,8 +1022,6 @@ const closeOrderPanel = () => {
   isOrderPanelOpen.value = false;
 };
 
-
-
 const setFeaturedImage = (index) => {
   currentFeaturedIndex.value = index;
   restartCarousel();
@@ -1102,6 +1099,14 @@ onMounted(() => {
 onBeforeUnmount(() => {
   stopCarousel();
 });
+</script>
+
+<style scoped>
+/* Ajustes finais dos filtros do catálogo */
+.mobile-filter-toggle {
+  display: none;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
