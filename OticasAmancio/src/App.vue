@@ -210,7 +210,16 @@ const isOrderPanelOpen = ref(false);
 const galleryProduct = ref(null);
 const galleryImageIndex = ref(0);
 const currentFeaturedIndex = ref(0);
+const lightboxImage = ref(null);
 let carouselTimer = null;
+
+const openImage = (src) => {
+    lightboxImage.value = src;
+};
+
+const closeImage = () => {
+    lightboxImage.value = null;
+};
 
 const openGallery = (product) => {
     galleryProduct.value = product;
@@ -253,129 +262,8 @@ const categories = {
 };
 
 const imagePath = (fileName) => new URL(`../img/${fileName}`, import.meta.url).href;
-const logoSrc = imagePath("LOGO KIM (1).jpg");
+const logoSrc = imagePath("logo-kim-otica.png");
 const products = [
-{
-  id: "oa-101",
-  name: "Amancio Classic 101",
-  category: "polarizadas",
-
-  image: imagePath("DSC07704.jpg"),
-
-  images: [
-    imagePath("DSC07739.jpg"),
-    imagePath("DSC07740.jpg"),
-    imagePath("DSC07741.jpg")
-  ],
-
-  price: "Sob consulta",
-
-  description: "Modelo solar polarizado para uso diário, com visual leve e proteção contra reflexos."
-},
-  {
-    id: "oa-102",
-    name: "Amancio Riviera 102",
-    category: "polarizadas",
-    image: imagePath("DSC07702.jpg"),
-    price: "Sob consulta",
-    description: "Armação solar com lente polarizada e presença elegante para dirigir ou caminhar."
-  },
-  {
-    id: "oa-201",
-    name: "Amancio Bella 201",
-    category: "feminina-acetato",
-    image: imagePath("DSC07696.jpg"),
-    price: "Sob consulta",
-    description: "Acetato feminino com frente marcante e encaixe confortável para lentes de grau."
-  },
-  {
-    id: "oa-202",
-    name: "Amancio Iris 202",
-    category: "feminina-acetato",
-    image: imagePath("DSC07671.jpg"),
-    price: "Sob consulta",
-    description: "Formato versátil para quem busca uma armação feminina moderna e resistente."
-  },
-  {
-    id: "oa-301",
-    name: "Amancio Lina 301",
-    category: "feminina-metal",
-    image: imagePath("DSC07676.jpg"),
-    price: "Sob consulta",
-    description: "Metal feminino delicado, indicado para um visual discreto e acabamento refinado."
-  },
-  {
-    id: "oa-302",
-    name: "Amancio Flora 302",
-    category: "feminina-metal",
-    image: imagePath("DSC07668.jpg"),
-    price: "Sob consulta",
-    description: "Armação metálica leve para lentes de grau com desenho confortável."
-  },
-  {
-    id: "oa-401",
-    name: "Amancio Urban 401",
-    category: "masculina-metal",
-    image: imagePath("DSC07723.jpg"),
-    price: "Sob consulta",
-    description: "Metal masculino com linhas firmes para rotina de trabalho e uso prolongado."
-  },
-  {
-    id: "oa-402",
-    name: "Amancio Prime 402",
-    category: "masculina-metal",
-    image: imagePath("logz.jpeg"),
-    price: "Sob consulta",
-    description: "Modelo masculino discreto, com ponte ajustável e acabamento minimalista."
-  },
-  {
-    id: "oa-501",
-    name: "Amancio Forte 501",
-    category: "masculina-acetato",
-    image: imagePath("logwhats.jpeg"),
-    price: "Sob consulta",
-    description: "Acetato masculino com estrutura robusta para quem prefere armações encorpadas."
-  },
-  {
-    id: "oa-502",
-    name: "Amancio Norte 502",
-    category: "masculina-acetato",
-    image: imagePath("lo.jpeg"),
-    price: "Sob consulta",
-    description: "Armação masculina em acetato com desenho atual e ótimo apoio no rosto."
-  },
-   {
-    id: "oa-502",
-    name: "Amancio Norte 502",
-    category: "masculina-acetato",
-    image: imagePath("logowhats.jpeg"),
-    price: "Sob consulta",
-    description: "Armação masculina em acetato com desenho atual e ótimo apoio no rosto."
-  },
-   {
-    id: "oa-502",
-    name: "Amancio Norte 502",
-    category: "masculina-acetato",
-    image: imagePath("l.jpeg"),
-    price: "Sob consulta",
-    description: "Armação masculina em acetato com desenho atual e ótimo apoio no rosto."
-  },
-   {
-    id: "oa-502",
-    name: "Amancio Norte 502",
-    category: "masculina-acetato",
-    image: imagePath("ll.jpeg"),
-    price: "Sob consulta",
-    description: "Armação masculina em acetato com desenho atual e ótimo apoio no rosto."
-  },
-   {
-    id: "oa-502",
-    name: "Amancio Norte 502",
-    category: "masculina-acetato",
-    image: imagePath("lzz.jpeg"),
-    price: "Sob consulta",
-    description: "Armação masculina em acetato com desenho atual e ótimo apoio no rosto."
-  },
   {
     id: "oa-m001",
     name: "Dobravel 1",
@@ -999,20 +887,20 @@ const products = [
     image: imagePath("uni-modelo-21.jpg"),
     price: "R$ 120,00",
     description: "Armação unissex versátil, confortável para o dia a dia."
-  },
+  }
 ];
 
 const featuredImages = [
   {
-    src: imagePath("DSC07673.jpg"),
-    alt: "Armação de óculos em destaque"
+    src: imagePath("masc-oakley-vilao-vilao-1.jpg"),
+    alt: "Armação Oakley Vilão em destaque"
   },
   {
-    src: imagePath("DSC07704.jpg"),
-    alt: "Óculos polarizado em destaque"
+    src: imagePath("uni-modelo-19.jpg"),
+    alt: "Armação unissex em destaque"
   },
   {
-    src: imagePath("DSC07720.jpg"),
+    src: imagePath("masc-metal-rayban-ferrari.jpg"),
     alt: "Armação metálica em destaque"
   }
 ];
@@ -1168,7 +1056,7 @@ onMounted(() => {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeOrderPanel();
-      closeGallery();
+      closeImage();
     }
   });
 });
