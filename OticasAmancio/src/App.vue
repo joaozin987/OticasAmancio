@@ -146,7 +146,8 @@
         <article v-for="product in filteredProducts" :key="product.id" class="product-card">
           <div class="product-media">
             <span class="tag">{{ categories[product.category] }}</span>
-            <img :src="product.image" :alt="product.name" @click="openImage(product.image)">
+            <span v-if="hasGallery(product)" class="photo-count">{{ product.images.length }} fotos</span>
+            <img :src="product.image" :alt="product.name" loading="lazy" decoding="async" @click="openProductMedia(product)">
           </div>
           <div class="product-content">
             <h3>{{ product.name }}</h3>
@@ -156,7 +157,7 @@
               <span class="badge">Armação disponível</span>
             </div>
             <div class="product-actions">
-              <button class="icon-button" type="button" :aria-label="`Ampliar ${product.name}`" @click="openImage(product.image)">⌕</button>
+              <button class="icon-button" type="button" :aria-label="`Ampliar ${product.name}`" @click="openProductMedia(product)">⌕</button>
               <button class="choose-button" type="button" @click="openOrderPanel(product)">Escolher armação</button>
             </div>
           </div>
@@ -171,7 +172,7 @@
     <div v-if="selectedProduct" class="order-card" role="dialog" aria-modal="true" aria-labelledby="orderTitle">
       <button class="close-button" type="button" @click="closeOrderPanel" aria-label="Fechar">×</button>
       <div class="selected-product">
-        <img :src="selectedProduct.image" :alt="selectedProduct.name">
+        <img :src="selectedProduct.image" :alt="selectedProduct.name" decoding="async">
         <div>
           <p class="eyebrow">Armação escolhida</p>
           <h2 id="orderTitle">{{ selectedProduct.name }}</h2>
@@ -235,6 +236,51 @@
     <img v-if="lightboxImage" :src="lightboxImage" alt="Imagem ampliada">
   </div>
 
+  <!-- Galeria para modelos com mais de uma foto (ex.: clipom e solares) -->
+  <div
+    v-if="galleryProduct"
+    class="gallery-modal"
+    role="dialog"
+    aria-modal="true"
+    :aria-label="`Fotos de ${galleryProduct.name}`"
+    @click.self="closeGallery"
+  >
+    <div class="gallery-card">
+      <button class="gallery-close" type="button" aria-label="Fechar galeria" @click="closeGallery">×</button>
+
+      <div class="gallery-stage">
+        <button class="gallery-arrow prev" type="button" aria-label="Foto anterior" @click="previousGalleryImage">‹</button>
+        <img
+          :key="galleryProduct.images[galleryImageIndex]"
+          :src="galleryProduct.images[galleryImageIndex]"
+          :alt="`${galleryProduct.name} - foto ${galleryImageIndex + 1}`"
+        >
+        <button class="gallery-arrow next" type="button" aria-label="Próxima foto" @click="nextGalleryImage">›</button>
+      </div>
+
+      <div class="gallery-thumbs">
+        <button
+          v-for="(image, index) in galleryProduct.images"
+          :key="image"
+          type="button"
+          :class="{ active: galleryImageIndex === index }"
+          :aria-label="`Ver foto ${index + 1}`"
+          @click="selectGalleryImage(index)"
+        >
+          <img :src="image" alt="" loading="lazy" decoding="async">
+        </button>
+      </div>
+
+      <div class="gallery-footer">
+        <div>
+          <strong>{{ galleryProduct.name }}</strong>
+          <span>{{ galleryImageIndex + 1 }} de {{ galleryProduct.images.length }}</span>
+        </div>
+        <button class="choose-button" type="button" @click="chooseFromGallery">Escolher armação</button>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <strong>Ótica Amancio</strong>
     <p>Catálogo online de armações. Atendimento e visitas em Maceió.</p>
@@ -270,6 +316,8 @@ const closeImage = () => {
   lightboxImage.value = null;
 };
 
+const hasGallery = (product) => Array.isArray(product.images) && product.images.length > 1;
+
 const openGallery = (product) => {
   galleryProduct.value = product;
   galleryImageIndex.value = 0;
@@ -278,6 +326,15 @@ const openGallery = (product) => {
 const closeGallery = () => {
   galleryProduct.value = null;
   galleryImageIndex.value = 0;
+};
+
+// Abre a galeria se o modelo tiver várias fotos; se tiver só uma, abre a imagem ampliada
+const openProductMedia = (product) => {
+  if (hasGallery(product)) {
+    openGallery(product);
+  } else {
+    openImage(product.image);
+  }
 };
 
 const nextGalleryImage = () => {
@@ -306,6 +363,9 @@ const categories = {
   "masculina-acetato": "Masculina acetato",
   "masculina-classica": "Masculina clássica",
   "masculina-oakley": "Masculina esportiva",
+  "feminina-acetato": "Feminina acetato",
+  "feminina-metal": "Feminina metal",
+  "feminina-clipom-solar": "Feminina clipom e solar",
   unissex: "Unissex"
 };
 
@@ -870,7 +930,7 @@ const products = [
     category: "unissex",
     image: imagePath("uni-modelo-12.jpg"),
     price: "R$ 120,00",
-    description: "Armação征unissex versátil, confortável para o dia a dia."
+    description: "Armação unissex versátil, confortável para o dia a dia."
   },
   {
     id: "oa-u071",
@@ -935,6 +995,541 @@ const products = [
     image: imagePath("uni-modelo-21.jpg"),
     price: "R$ 120,00",
     description: "Armação unissex versátil, confortável para o dia a dia."
+  },
+  {
+    id: "oa-f079",
+    name: "Acetato 01",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-01.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f080",
+    name: "Acetato 02",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-02.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f081",
+    name: "Acetato 03",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-03.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f082",
+    name: "Acetato 04",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-04.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f083",
+    name: "Acetato 05",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-05.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f084",
+    name: "Acetato 06",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-06.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f085",
+    name: "Acetato 07",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-07.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f086",
+    name: "Acetato 08",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-08.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f087",
+    name: "Acetato 09",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-09.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f088",
+    name: "Acetato 10",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-10.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f089",
+    name: "Acetato 11",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-11.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f090",
+    name: "Acetato 12",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-12.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f091",
+    name: "Acetato 13",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-13.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f092",
+    name: "Acetato 14",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-14.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f093",
+    name: "Acetato 15",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-15.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f094",
+    name: "Acetato 16",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-16.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f095",
+    name: "Acetato 17",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-17.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f096",
+    name: "Acetato 18",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-18.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f097",
+    name: "Acetato 19",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-19.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f098",
+    name: "Acetato 20",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-20.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f099",
+    name: "Acetato 21",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-21.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f100",
+    name: "Acetato 22",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-22.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f101",
+    name: "Acetato 23",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-23.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f102",
+    name: "Acetato 24",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-24.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f103",
+    name: "Acetato 25",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-25.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f104",
+    name: "Acetato 26",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-26.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f105",
+    name: "Acetato 27",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-27.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f106",
+    name: "Acetato 28",
+    category: "feminina-acetato",
+    image: imagePath("fem-acetato-28.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato, leve, resistente e confortável para uso diário."
+  },
+  {
+    id: "oa-f107",
+    name: "Metal 01",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-01.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f108",
+    name: "Metal 02",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-02.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f109",
+    name: "Metal 03",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-03.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f110",
+    name: "Metal 04",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-04.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f111",
+    name: "Metal 05",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-05.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f112",
+    name: "Metal 06",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-06.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f113",
+    name: "Metal 07",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-07.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f114",
+    name: "Metal 08",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-08.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f115",
+    name: "Metal 09",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-09.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f116",
+    name: "Metal 10",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-10.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f117",
+    name: "Metal 11",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-11.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f118",
+    name: "Metal 12",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-12.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f119",
+    name: "Metal 13",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-13.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f120",
+    name: "Metal 14",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-14.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f121",
+    name: "Metal 15",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-15.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f122",
+    name: "Metal 16",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-16.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f123",
+    name: "Metal 17",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-17.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f124",
+    name: "Metal 18",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-18.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f125",
+    name: "Metal 19",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-19.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f126",
+    name: "Metal 20",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-20.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f127",
+    name: "Metal 21",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-21.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f128",
+    name: "Metal 22",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-22.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f129",
+    name: "Metal 23",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-23.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f130",
+    name: "Metal 24",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-24.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f131",
+    name: "Metal 25",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-25.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f132",
+    name: "Metal 26",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-26.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f133",
+    name: "Metal 27",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-27.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f134",
+    name: "Metal 28",
+    category: "feminina-metal",
+    image: imagePath("fem-metal-28.jpg"),
+    price: "R$ 120,00",
+    description: "Armação feminina em metal, leve, delicada e com acabamento resistente."
+  },
+  {
+    id: "oa-f135",
+    name: "Clipom 01",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-clipom-01-1.jpg"),
+    images: [
+      imagePath("fem-clipom-01-1.jpg"),
+      imagePath("fem-clipom-01-2.jpg"),
+      imagePath("fem-clipom-01-3.jpg"),
+      imagePath("fem-clipom-01-4.jpg")
+    ],
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato com clipom solar encaixável: óculos de grau e de sol em uma peça só."
+  },
+  {
+    id: "oa-f136",
+    name: "Clipom 02",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-clipom-02-1.jpg"),
+    images: [
+      imagePath("fem-clipom-02-1.jpg"),
+      imagePath("fem-clipom-02-2.jpg")
+    ],
+    price: "R$ 120,00",
+    description: "Armação feminina em acetato com clipom solar encaixável: óculos de grau e de sol em uma peça só."
+  },
+  {
+    id: "oa-f137",
+    name: "MilMil Solar 01",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-solar-milmil-01-1.jpg"),
+    images: [
+      imagePath("fem-solar-milmil-01-1.jpg"),
+      imagePath("fem-solar-milmil-01-2.jpg"),
+      imagePath("fem-solar-milmil-01-3.jpg")
+    ],
+    price: "R$ 120,00",
+    description: "Óculos solar feminino em acetato, formato retangular com detalhe dourado na haste."
+  },
+  {
+    id: "oa-f138",
+    name: "MilMil Solar 02",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-solar-milmil-02.jpg"),
+    price: "R$ 120,00",
+    description: "Óculos solar feminino em acetato, formato arredondado e acabamento elegante."
+  },
+  {
+    id: "oa-f139",
+    name: "MilMil Metal Modelo 21",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-metal-milmil-21-1.jpg"),
+    images: [
+      imagePath("fem-metal-milmil-21-1.jpg"),
+      imagePath("fem-metal-milmil-21-2.jpg")
+    ],
+    price: "R$ 120,00",
+    description: "Óculos solar feminino em metal com lente degradê e visual sofisticado."
+  },
+  {
+    id: "oa-f140",
+    name: "MilMil Metal Hexagonal",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-metal-milmil-hexagonal-1.jpg"),
+    images: [
+      imagePath("fem-metal-milmil-hexagonal-1.jpg"),
+      imagePath("fem-metal-milmil-hexagonal-2.jpg")
+    ],
+    price: "R$ 120,00",
+    description: "Óculos solar feminino hexagonal, com hastes em acetato e detalhe dourado."
+  },
+  {
+    id: "oa-f141",
+    name: "MilMil Metal Oval 01",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-metal-milmil-oval-01.jpg"),
+    price: "R$ 120,00",
+    description: "Óculos solar feminino em metal, formato oval, leve e moderno."
+  },
+  {
+    id: "oa-f142",
+    name: "MilMil Metal Oval 02",
+    category: "feminina-clipom-solar",
+    image: imagePath("fem-metal-milmil-oval-02.jpg"),
+    price: "R$ 120,00",
+    description: "Óculos solar feminino em metal, formato oval com hastes trabalhadas."
   }
 ];
 
@@ -942,6 +1537,10 @@ const featuredImages = [
   {
     src: imagePath("masc-oakley-vilao-vilao-1.jpg"),
     alt: "Armação Oakley Vilão em destaque"
+  },
+  {
+    src: imagePath("fem-clipom-01-1.jpg"),
+    alt: "Armação feminina com clipom em destaque"
   },
   {
     src: imagePath("uni-modelo-19.jpg"),
@@ -1038,6 +1637,12 @@ const closeOrderPanel = () => {
   isOrderPanelOpen.value = false;
 };
 
+const chooseFromGallery = () => {
+  const product = galleryProduct.value;
+  closeGallery();
+  if (product) openOrderPanel(product);
+};
+
 const setFeaturedImage = (index) => {
   currentFeaturedIndex.value = index;
   restartCarousel();
@@ -1101,19 +1706,28 @@ const sendOrder = () => {
   window.open(whatsAppLink(message), "_blank");
 };
 
+const handleKeydown = (event) => {
+  if (event.key === "Escape") {
+    closeGallery();
+    closeOrderPanel();
+    closeImage();
+    return;
+  }
+
+  if (galleryProduct.value) {
+    if (event.key === "ArrowRight") nextGalleryImage();
+    if (event.key === "ArrowLeft") previousGalleryImage();
+  }
+};
+
 onMounted(() => {
   startCarousel();
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeOrderPanel();
-      closeImage();
-    }
-  });
+  document.addEventListener("keydown", handleKeydown);
 });
 
 onBeforeUnmount(() => {
   stopCarousel();
+  document.removeEventListener("keydown", handleKeydown);
 });
 </script>
 
@@ -1224,6 +1838,159 @@ onBeforeUnmount(() => {
 
 .mobile-menu-toggle .bar-bot {
   transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ==========================================================
+   Selo "X fotos" no card + Galeria de fotos do modelo
+   ========================================================== */
+.product-media {
+  position: relative;
+}
+
+.photo-count {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 2;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.78);
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.gallery-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(10, 12, 16, 0.82);
+}
+
+.gallery-card {
+  position: relative;
+  width: min(760px, 100%);
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  overflow: auto;
+}
+
+.gallery-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(17, 24, 39, 0.75);
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gallery-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+.gallery-stage img {
+  display: block;
+  width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+}
+
+.gallery-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111827;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-arrow.prev {
+  left: 10px;
+}
+
+.gallery-arrow.next {
+  right: 10px;
+}
+
+.gallery-thumbs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.gallery-thumbs button {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background: #f3f4f6;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.65;
+}
+
+.gallery-thumbs button.active {
+  border-color: #5b6f48;
+  opacity: 1;
+}
+
+.gallery-thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gallery-footer strong {
+  display: block;
+  color: #111827;
+}
+
+.gallery-footer span {
+  font-size: 0.85rem;
+  color: #6b7280;
 }
 
 /* ==========================================================
@@ -1338,6 +2105,29 @@ onBeforeUnmount(() => {
     color: #5b6f48 !important;
     border: 1px solid #ffffff !important;
   }
+
+  /* Galeria no celular */
+  .gallery-modal {
+    padding: 10px;
+  }
+
+  .gallery-card {
+    padding: 12px;
+  }
+
+  .gallery-stage img {
+    max-height: 55vh;
+  }
+
+  .gallery-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+
+  .gallery-footer .choose-button {
+    width: 100%;
+  }
 }
 
 /* Telas menores (iPhone SE / 400px e abaixo) */
@@ -1353,6 +2143,11 @@ onBeforeUnmount(() => {
   .mobile-menu-toggle {
     width: 26px !important;
     height: 18px !important;
+  }
+
+  .gallery-thumbs button {
+    width: 54px;
+    height: 54px;
   }
 }
 </style>
