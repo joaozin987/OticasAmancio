@@ -2004,10 +2004,14 @@ onBeforeUnmount(() => {
    - Menu abre empurrando a seção hero com divisória
    ========================================================== */
 @media (max-width: 768px) {
+ /* ==========================================================
+   Header Mobile Verde Oficial (igual ao Desktop)
+   ========================================================== */
+@media (max-width: 768px) {
   .site-header {
     width: 100% !important;
     position: relative !important;
-    background-color: #5b6f48 !important; /* Cor verde oficial do seu desktop */
+    background-color: #5b6f48 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
   }
 
@@ -2023,7 +2027,6 @@ onBeforeUnmount(() => {
     background-color: #5b6f48 !important;
   }
 
-  /* Logo maior e cravada na esquerda */
   .header-logo {
     display: flex !important;
     align-items: center !important;
@@ -2032,14 +2035,13 @@ onBeforeUnmount(() => {
   }
 
   .header-logo img {
-    height: 54px !important; /* Logo grande e nítida */
+    height: 54px !important;
     width: auto !important;
     max-width: 190px !important;
     display: block !important;
     object-fit: contain;
   }
 
-  /* Botão Hambúrguer / X branco na ponta direita */
   .mobile-menu-toggle {
     display: flex !important;
     flex-direction: column !important;
@@ -2055,7 +2057,6 @@ onBeforeUnmount(() => {
     z-index: 102;
   }
 
-  /* Cor branca nas barras para contrastar com o verde */
   .mobile-menu-toggle .bar {
     width: 100%;
     height: 3px;
@@ -2063,7 +2064,6 @@ onBeforeUnmount(() => {
     border-radius: 4px;
   }
 
-  /* Gaveta do menu aberta */
   .nav-links {
     display: none;
     width: 100% !important;
@@ -2080,13 +2080,12 @@ onBeforeUnmount(() => {
     display: flex !important;
   }
 
-  /* Estilização dos botões no estilo do tema */
   .nav-links a {
     width: 100% !important;
     box-sizing: border-box !important;
     text-align: center !important;
     padding: 12px 16px !important;
-    border-radius: 25px !important; /* Arredondado igual aos botões do desktop */
+    border-radius: 25px !important;
     font-weight: 700 !important;
     text-decoration: none !important;
     display: block !important;
@@ -2128,8 +2127,83 @@ onBeforeUnmount(() => {
   .gallery-footer .choose-button {
     width: 100%;
   }
-}
 
+  /* ==========================================================
+     Filtros do catálogo no mobile
+     ========================================================== */
+  .mobile-filter-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 13px 16px;
+    margin-bottom: 10px;
+    border: 2px solid #c7cdd4;
+    border-radius: 12px;
+    background: #ffffff;
+    color: #111827;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mobile-filter-toggle[aria-expanded="true"] {
+    border-color: #5b6f48;
+  }
+
+  .mobile-filter-status {
+    min-width: 0;
+    max-width: 60%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .filters {
+    display: none;
+  }
+
+  .filters.mobile-open {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+    margin-bottom: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #f9fafb;
+  }
+
+  .filters.mobile-open .filter-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 10px;
+    border-width: 1.5px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .filters.mobile-open .filter-button:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .filters.mobile-open .clear-filter-button {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 10px;
+    border-width: 1.5px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+  }
+}
+}
 /* Telas menores (iPhone SE / 400px e abaixo) */
 @media (max-width: 400px) {
   .nav {
@@ -2148,6 +2222,13 @@ onBeforeUnmount(() => {
   .gallery-thumbs button {
     width: 54px;
     height: 54px;
+  }
+}
+
+/* Telas bem estreitas: filtros em uma coluna só */
+@media (max-width: 360px) {
+  .filters.mobile-open {
+    grid-template-columns: 1fr;
   }
 }
 </style>
